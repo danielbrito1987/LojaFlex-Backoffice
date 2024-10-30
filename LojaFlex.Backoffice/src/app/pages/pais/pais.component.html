@@ -1,0 +1,121 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Países</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Home</a></li>
+                    <li class="breadcrumb-item active">Países</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container-fluid">
+        <form (ngSubmit)="loadPaises()" class="mb-3">
+            <div class="form-row">
+                <div class="col-5">
+                    <input type="text" class="form-control" placeholder="Filtrar por nome do país"
+                        [(ngModel)]="filterNome" name="filterNome" />
+                </div>
+                <div class="col-5">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>&nbsp;&nbsp;
+                    <button type="button" class="btn btn-success" (click)="openModal()">Novo País</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="d-flex justify-content-center" *ngIf="isLoading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+        </div>
+
+        <table class="table table-bordered" *ngIf="!isLoading">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Sigla</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pais of paises">
+                    <td class="col-1">{{ pais.idPais }}</td>
+                    <td class="col-3">{{ pais.dscPais }}</td>
+                    <td class="col-3">{{ pais.sigla }}</td>
+                    <td class="col-1">
+                        <button class="btn btn-warning" (click)="openModal(pais)" tooltip="Editar País">
+                            <i class="fas fa-edit"></i>
+                        </button>&nbsp;&nbsp;
+                        <button class="btn btn-danger" (click)="confirmDelete(pais)" tooltip="Excluir País">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalPais" tabindex="-1" role="dialog" aria-labelledby="modalPaisLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalPaisLabel">{{ isEditing ? 'Editar País' : 'Novo País'
+                            }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form [formGroup]="paisForm" (ngSubmit)="savePais()">
+                            <div class="form-group">
+                                <div class="col">
+                                    <label for="dscPais">Nome</label>
+                                    <input type="text" id="dscPais" formControlName="dscPais" class="form-control"
+                                        [ngClass]="{'error-input': paisForm.get('dscPais')?.invalid && (paisForm.get('dscPais')?.dirty || paisForm.get('dscPais')?.touched)}">
+                                    <div
+                                        *ngIf="paisForm.get('dscPais')?.invalid && (paisForm.get('dscPais')?.dirty || paisForm.get('dscPais')?.touched)">
+                                        <small class="error-text" *ngIf="paisForm.get('dscPais')?.errors?.['required']">
+                                            A descrição é obrigatória.
+                                        </small>
+                                        <small class="error-text"
+                                            *ngIf="paisForm.get('dscPais')?.errors?.['maxlength']">
+                                            A descrição não pode ter mais que 100 caracteres.
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label for="sigla">Sigla</label>
+                                    <input type="text" id="sigla" formControlName="sigla" class="form-control" mask="SSS" (input)="changeSigla()"
+                                        [ngClass]="{'error-input': paisForm.get('sigla')?.invalid && (paisForm.get('sigla')?.dirty || paisForm.get('sigla')?.touched)}">
+                                    <div
+                                        *ngIf="paisForm.get('sigla')?.invalid && (paisForm.get('sigla')?.dirty || paisForm.get('sigla')?.touched)">
+                                        <small class="error-text" *ngIf="paisForm.get('sigla')?.errors?.['required']">
+                                            A sigla é obrigatória.
+                                        </small>
+                                        <small class="error-text"
+                                            *ngIf="paisForm.get('sigla')?.errors?.['maxlength']">
+                                            A sigla não pode ter mais que 5 caracteres.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            (click)="closeModal()">Fechar</button>
+                        <button type="submit" class="btn btn-primary" (click)="savePais()">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

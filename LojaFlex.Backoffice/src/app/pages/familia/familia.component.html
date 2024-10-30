@@ -1,0 +1,104 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Famílias</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Home</a></li>
+                    <li class="breadcrumb-item active">Famílias</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container-fluid">
+        <form (ngSubmit)="loadFamilias()" class="mb-3">
+            <div class="form-row">
+                <div class="col-5">
+                    <input type="text" class="form-control" placeholder="Filtrar por nome da família"
+                        [(ngModel)]="filterNome" name="filterNome" />
+                </div>
+                <div class="col-5">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>&nbsp;&nbsp;
+                    <button type="button" class="btn btn-success" (click)="openModal()">Nova Família</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="d-flex justify-content-center" *ngIf="isLoading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+        </div>
+
+        <table class="table table-bordered" *ngIf="!isLoading">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let familia of familias">
+                    <td class="col-1">{{ familia.idFamilia }}</td>
+                    <td class="col-3">{{ familia.dscFamilia }}</td>
+                    <td class="col-1">
+                        <button class="btn btn-warning" (click)="openModal(familia)" tooltip="Editar Família">
+                            <i class="fas fa-edit"></i>
+                        </button>&nbsp;&nbsp;
+                        <button class="btn btn-danger" (click)="confirmDelete(familia)" tooltip="Excluir Família">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalFamilia" tabindex="-1" role="dialog" aria-labelledby="modalFamiliaLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalFamiliaLabel">{{ isEditing ? 'Editar Família' : 'Novo Família'
+                            }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form [formGroup]="familiaForm" (ngSubmit)="saveFamilia()">
+                            <div class="form-group">
+                                <div class="col">
+                                    <label for="dscFamilia">Nome</label>
+                                    <input type="text" id="dscFamilia" formControlName="dscFamilia" class="form-control"
+                                        [ngClass]="{'error-input': familiaForm.get('dscFamilia')?.invalid && (familiaForm.get('dscFamilia')?.dirty || familiaForm.get('dscFamilia')?.touched)}">
+                                    <div
+                                        *ngIf="familiaForm.get('dscFamilia')?.invalid && (familiaForm.get('dscFamilia')?.dirty || familiaForm.get('dscFamilia')?.touched)">
+                                        <small class="error-text" *ngIf="familiaForm.get('dscFamilia')?.errors?.['required']">
+                                            A descrição é obrigatória.
+                                        </small>
+                                        <small class="error-text"
+                                            *ngIf="familiaForm.get('dscFamilia')?.errors?.['maxlength']">
+                                            A descrição não pode ter mais que 150 caracteres.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            (click)="closeModal()">Fechar</button>
+                        <button type="submit" class="btn btn-primary" (click)="saveFamilia()">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
