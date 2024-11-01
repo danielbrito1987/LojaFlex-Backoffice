@@ -13,6 +13,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule } from '@angular/common/http';
 import { PaisComponent } from './pages/pais/pais.component';
 import { FamiliaComponent } from './pages/familia/familia.component';
+import { EspecieComponent } from './pages/especie/especie.component';
 
 const maskConfig: Partial<IConfig> = {
   thousandSeparator: '.',
@@ -26,7 +27,8 @@ const maskConfig: Partial<IConfig> = {
     LayoutComponent,
     DashboardComponent,
     PaisComponent,
-    FamiliaComponent
+    FamiliaComponent,
+    EspecieComponent
   ],
   imports: [
     HttpClientModule,

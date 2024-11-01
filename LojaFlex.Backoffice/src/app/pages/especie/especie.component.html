@@ -2,12 +2,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Famílias</h1>
+                <h1 class="m-0">Espécies</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a routerLink="/dashboard">Home</a></li>
-                    <li class="breadcrumb-item active">Famílias</li>
+                    <li class="breadcrumb-item active">Espécies</li>
                 </ol>
             </div>
         </div>
@@ -16,15 +16,15 @@
 
 <div class="content">
     <div class="container-fluid">
-        <form (ngSubmit)="loadFamilias()" class="mb-3">
+        <form (ngSubmit)="loadEspecies()" class="mb-3">
             <div class="form-row">
                 <div class="col-5">
-                    <input type="text" class="form-control" placeholder="Filtrar por nome da família"
+                    <input type="text" class="form-control" placeholder="Filtrar por nome da espécie"
                         [(ngModel)]="filterNome" name="filterNome" />
                 </div>
                 <div class="col-5">
                     <button type="submit" class="btn btn-primary">Filtrar</button>&nbsp;&nbsp;
-                    <button type="button" class="btn btn-success" (click)="openModal()">Nova Família</button>
+                    <button type="button" class="btn btn-success" (click)="openModal()">Nova Espécie</button>
                 </div>
             </div>
         </form>
@@ -44,14 +44,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let familia of familias">
-                    <td class="col-1">{{ familia.idFamilia }}</td>
-                    <td class="col-3">{{ familia.dscFamilia }}</td>
+                <tr *ngFor="let item of especies">
+                    <td class="col-1">{{ item.idEspecie }}</td>
+                    <td class="col-3">{{ item.dscEspecie }}</td>
                     <td class="col-1">
-                        <button class="btn btn-warning" (click)="openModal(familia)" tooltip="Editar Família">
+                        <button class="btn btn-warning" (click)="openModal(item)" tooltip="Editar Espécie">
                             <i class="fas fa-edit"></i>
                         </button>&nbsp;&nbsp;
-                        <button class="btn btn-danger" (click)="confirmDelete(familia)" tooltip="Excluir Família">
+                        <button class="btn btn-danger" (click)="confirmDelete(item)" tooltip="Excluir Espécie">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
@@ -60,31 +60,31 @@
         </table>
 
         <!-- Modal -->
-        <div class="modal fade" id="modalFamilia" tabindex="-1" role="dialog" aria-labelledby="modalFamiliaLabel"
+        <div class="modal fade" id="modalEspecie" tabindex="-1" role="dialog" aria-labelledby="modalEspecieLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalFamiliaLabel">{{ isEditing ? 'Editar Família' : 'Nova Família'
+                        <h5 class="modal-title" id="modalEspecieLabel">{{ isEditing ? 'Editar Espécie' : 'Nova Espécie'
                             }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form [formGroup]="familiaForm" (ngSubmit)="saveFamilia()">
+                        <form [formGroup]="especieForm" (ngSubmit)="saveEspecie()">
                             <div class="form-group">
                                 <div class="col">
-                                    <label for="dscFamilia">Nome</label>
-                                    <input type="text" id="dscFamilia" formControlName="dscFamilia" class="form-control"
-                                        [ngClass]="{'error-input': familiaForm.get('dscFamilia')?.invalid && (familiaForm.get('dscFamilia')?.dirty || familiaForm.get('dscFamilia')?.touched)}">
+                                    <label for="dscEspecie">Nome</label>
+                                    <input type="text" id="dscEspecie" formControlName="dscEspecie" class="form-control"
+                                        [ngClass]="{'error-input': especieForm.get('dscEspecie')?.invalid && (especieForm.get('dscEspecie')?.dirty || especieForm.get('dscEspecie')?.touched)}">
                                     <div
-                                        *ngIf="familiaForm.get('dscFamilia')?.invalid && (familiaForm.get('dscFamilia')?.dirty || familiaForm.get('dscFamilia')?.touched)">
-                                        <small class="error-text" *ngIf="familiaForm.get('dscFamilia')?.errors?.['required']">
+                                        *ngIf="especieForm.get('dscEspecie')?.invalid && (especieForm.get('dscEspecie')?.dirty || especieForm.get('dscEspecie')?.touched)">
+                                        <small class="error-text" *ngIf="especieForm.get('dscEspecie')?.errors?.['required']">
                                             A descrição é obrigatória.
                                         </small>
                                         <small class="error-text"
-                                            *ngIf="familiaForm.get('dscFamilia')?.errors?.['maxlength']">
+                                            *ngIf="especieForm.get('dscEspecie')?.errors?.['maxlength']">
                                             A descrição não pode ter mais que 150 caracteres.
                                         </small>
                                     </div>
@@ -95,7 +95,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"
                             (click)="closeModal()">Fechar</button>
-                        <button type="submit" class="btn btn-primary" (click)="saveFamilia()">Salvar</button>
+                        <button type="submit" class="btn btn-primary" (click)="saveEspecie()">Salvar</button>
                     </div>
                 </div>
             </div>
